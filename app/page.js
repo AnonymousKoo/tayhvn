@@ -3,6 +3,9 @@ const logo01 =
 const logo02 =
   "https://th.webtestsdev.com/tns-lab/wp-content/uploads/2026/10/TAYHVN-Athletic-Logo-02.png";
 
+const MEDIA_ENDPOINT =
+  "https://th.webtestsdev.com/tns-lab/wp-json/wp/v2/pages?slug=tayhvn-media&_fields=content";
+
 const categories = ["Tees", "Hoodies", "Shorts", "Sets", "Performance", "Accessories"];
 
 const featured = [
@@ -12,7 +15,93 @@ const featured = [
   { name: "Drop 01 — Set", label: "Coming soon" },
 ];
 
-export default function Home() {
+function decodeUrl(value = "") {
+  return value.replaceAll("&amp;", "&");
+}
+
+function imageFromTag(tag = "") {
+  const srcset = tag.match(/srcset=["']([^"']+)["']/i)?.[1];
+
+  if (srcset) {
+    const candidates = srcset
+      .split(",")
+      .map((candidate) => {
+        const match = candidate.trim().match(/^(\S+)\s+(\d+)w$/);
+        return match ? { url: decodeUrl(match[1]), width: Number(match[2]) } : null;
+      })
+      .filter(Boolean)
+      .sort((a, b) => b.width - a.width);
+
+    if (candidates[0]?.url) return candidates[0].url;
+  }
+
+  return decodeUrl(tag.match(/src=["']([^"']+)["']/i)?.[1] || "");
+}
+
+function extractSlot(html, slot) {
+  const escaped = slot.replace(/[.*+?^$()|[\]\\{}]/g, "\\$&");
+  const figure = html.match(
+    new RegExp(
+      `<figure[^>]*id=["']${escaped}["'][^>]*>[\\s\\S]*?<img[^>]*>`,
+      "i",
+    ),
+  )?.[0];
+
+  if (!figure) return null;
+
+  const url = imageFromTag(figure);
+  if (!url || url.includes("TAYHVN-Athletic-Logo-01")) return null;
+
+  return url;
+}
+
+async function getMedia() {
+  try {
+    const response = await fetch(MEDIA_ENDPOINT, {
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) return {};
+
+    const pages = await response.json();
+    const html = pages?.[0]?.content?.rendered || "";
+
+    return {
+      hero: extractSlot(html, "tayhvn-hero"),
+      men: extractSlot(html, "tayhvn-men"),
+      women: extractSlot(html, "tayhvn-women"),
+      drops: [
+        extractSlot(html, "tayhvn-drop-1"),
+        extractSlot(html, "tayhvn-drop-2"),
+        extractSlot(html, "tayhvn-drop-3"),
+        extractSlot(html, "tayhvn-drop-4"),
+      ],
+      lookbook: [
+        extractSlot(html, "tayhvn-lookbook-1"),
+        extractSlot(html, "tayhvn-lookbook-2"),
+        extractSlot(html, "tayhvn-lookbook-3"),
+      ],
+    };
+  } catch {
+    return {};
+  }
+}
+
+function photoStyle(url, overlay) {
+  if (!url) return undefined;
+
+  return {
+    backgroundImage: `${overlay}, url("${url}")`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  };
+}
+
+export default async function Home() {
+  const media = await getMedia();
+  const dropImages = media.drops || [];
+  const lookbookImages = media.lookbook || [];
+
   return (
     <main>
       <div className="announcement">NEW DROP COMING SOON · TAYHVN ATHLETIC</div>
@@ -38,7 +127,14 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="hero" id="top">
+      <section
+        className={`hero${media.hero ? " heroWithPhoto" : ""}`}
+        id="top"
+        style={photoStyle(
+          media.hero,
+          "linear-gradient(90deg, rgba(3,3,3,.92) 0%, rgba(3,3,3,.72) 42%, rgba(3,3,3,.28) 70%, rgba(3,3,3,.45) 100%)",
+        )}
+      >
         <div className="heroTexture" aria-hidden="true" />
         <div className="heroEmblem" aria-hidden="true">
           <div className="heroEmblemRing" />
@@ -64,7 +160,7 @@ export default function Home() {
         </div>
         <div className="heroStatus">
           <span>CAMPAIGN 001</span>
-          <span>IMAGE / VIDEO SLOT</span>
+          <span>{media.hero ? "WORDPRESS CAMPAIGN" : "IMAGE / VIDEO SLOT"}</span>
         </div>
       </section>
 
@@ -80,9 +176,15 @@ export default function Home() {
         <div className="productGrid">
           {featured.map((item, index) => (
             <article className="productCard" key={item.name}>
-              <div className="productVisual">
+              <div
+                className={`productVisual${dropImages[index] ? " productVisualPhoto" : ""}`}
+                style={photoStyle(
+                  dropImages[index],
+                  "linear-gradient(to top, rgba(0,0,0,.48), rgba(0,0,0,.05) 55%)",
+                )}
+              >
                 <span>0{index + 1}</span>
-                <strong>TAYHVN</strong>
+                {!dropImages[index] && <strong>TAYHVN</strong>}
               </div>
               <div className="productMeta">
                 <div>
@@ -117,24 +219,40 @@ export default function Home() {
       </section>
 
       <section className="splitShop">
-        <article className="splitPanel" id="men">
+        <article
+          className={`splitPanel${media.men ? " splitPanelPhoto" : ""}`}
+          id="men"
+          style={photoStyle(
+            media.men,
+            "linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.10) 70%)",
+          )}
+        >
           <div className="splitNoise" aria-hidden="true" />
           <div className="splitContent">
             <p className="eyebrow">MEN</p>
             <h2>TRAIN. MOVE. REPEAT.</h2>
             <a className="button buttonLight" href="#featured">Shop Men</a>
           </div>
-          <span className="imageSlot">MEN CAMPAIGN IMAGE</span>
+          {!media.men && <span className="imageSlot">MEN CAMPAIGN IMAGE</span>}
         </article>
 
-        <article className="splitPanel splitPanelGold" id="women">
+        <article
+          className={`splitPanel splitPanelGold${media.women ? " splitPanelPhoto" : ""}`}
+          id="women"
+          style={photoStyle(
+            media.women,
+            "linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,.08) 70%)",
+          )}
+        >
           <div className="splitNoise" aria-hidden="true" />
-          <div className="splitContent darkText">
-            <p className="eyebrow dark">WOMEN</p>
+          <div className={`splitContent${media.women ? "" : " darkText"}`}>
+            <p className={`eyebrow${media.women ? "" : " dark"}`}>WOMEN</p>
             <h2>OWN THE STANDARD.</h2>
-            <a className="button buttonDark" href="#featured">Shop Women</a>
+            <a className={`button ${media.women ? "buttonLight" : "buttonDark"}`} href="#featured">
+              Shop Women
+            </a>
           </div>
-          <span className="imageSlot darkText">WOMEN CAMPAIGN IMAGE</span>
+          {!media.women && <span className="imageSlot darkText">WOMEN CAMPAIGN IMAGE</span>}
         </article>
       </section>
 
@@ -149,10 +267,34 @@ export default function Home() {
           <a className="textLink goldLink" href="#story">View lookbook →</a>
         </div>
 
-        <div className="lookbookFrames" aria-label="Campaign image placeholders">
-          <div className="frame frameTall"><span>01</span></div>
-          <div className="frame"><span>02</span></div>
-          <div className="frame frameWide"><span>03</span></div>
+        <div className="lookbookFrames" aria-label="Campaign imagery">
+          <div
+            className={`frame frameTall${lookbookImages[0] ? " framePhoto" : ""}`}
+            style={photoStyle(
+              lookbookImages[0],
+              "linear-gradient(to top, rgba(0,0,0,.22), rgba(0,0,0,.02))",
+            )}
+          >
+            <span>01</span>
+          </div>
+          <div
+            className={`frame${lookbookImages[1] ? " framePhoto" : ""}`}
+            style={photoStyle(
+              lookbookImages[1],
+              "linear-gradient(to top, rgba(0,0,0,.22), rgba(0,0,0,.02))",
+            )}
+          >
+            <span>02</span>
+          </div>
+          <div
+            className={`frame frameWide${lookbookImages[2] ? " framePhoto" : ""}`}
+            style={photoStyle(
+              lookbookImages[2],
+              "linear-gradient(to top, rgba(0,0,0,.22), rgba(0,0,0,.02))",
+            )}
+          >
+            <span>03</span>
+          </div>
         </div>
       </section>
 
