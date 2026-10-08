@@ -42,7 +42,7 @@ export default function Home() {
         <div className="heroTexture" aria-hidden="true" />
         <div className="heroEmblem" aria-hidden="true">
           <div className="heroEmblemRing" />
-          <span className="heroEmblemLetter">T</span>
+          <img className="heroEmblemLogo" src={logo01} alt="" />
           <span className="heroEmblemIndex">01</span>
           <span className="heroEmblemLabel">TAYHVN / ATHLETIC</span>
         </div>
