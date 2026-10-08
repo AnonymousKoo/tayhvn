@@ -1,4 +1,6 @@
-export const dynamic = "force-dynamic";
+"use client";
+
+import { useEffect, useState } from "react";
 
 const logo01 =
   "https://th.webtestsdev.com/tns-lab/wp-content/uploads/2026/10/TAYHVN-Athletic-Logo-01.png";
@@ -59,7 +61,7 @@ function extractSlot(html, slot) {
 
 async function getMedia() {
   try {
-    const response = await fetch(MEDIA_ENDPOINT, {
+    const response = await fetch(`${MEDIA_ENDPOINT}&_=${Date.now()}`, {
       cache: "no-store",
     });
 
@@ -99,8 +101,21 @@ function photoStyle(url, overlay) {
   };
 }
 
-export default async function Home() {
-  const media = await getMedia();
+export default function Home() {
+  const [media, setMedia] = useState({});
+
+  useEffect(() => {
+    let active = true;
+
+    getMedia().then((data) => {
+      if (active) setMedia(data);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const dropImages = media.drops || [];
   const lookbookImages = media.lookbook || [];
 
