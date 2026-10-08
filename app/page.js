@@ -43,7 +43,7 @@ export default function Home() {
         <div className="heroEmblem" aria-hidden="true">
           <div className="heroEmblemRing" />
           <img className="heroEmblemLogo" src="/th-monogram.svg" alt="" />
-          <span className="heroEmblemIndex">01</span>
+          <span className="heroEmblemIndex">™</span>
           <span className="heroEmblemLabel">TAYHVN / ATHLETIC</span>
         </div>
         <div className="heroContent">
