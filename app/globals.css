@@ -200,21 +200,23 @@ main {
 
 .heroEmblem {
   position: absolute;
-  top: 52%;
-  right: 7vw;
-  width: min(33vw, 470px);
+  top: 51%;
+  right: 5vw;
+  width: min(38vw, 520px);
   aspect-ratio: 1;
   transform: translateY(-50%);
+  background: radial-gradient(circle, rgba(199, 155, 75, 0.14) 0%, rgba(199, 155, 75, 0.06) 34%, rgba(199, 155, 75, 0) 68%);
 }
 
 .heroEmblemRing {
   position: absolute;
-  inset: 0;
-  border: 1px solid rgba(215, 185, 109, 0.32);
+  inset: 4%;
+  border: 1px solid rgba(226, 189, 102, 0.66);
   border-radius: 50%;
   box-shadow:
-    0 0 0 36px rgba(199, 155, 75, 0.025),
-    0 0 90px rgba(199, 155, 75, 0.07);
+    0 0 0 46px rgba(199, 155, 75, 0.035),
+    0 0 0 92px rgba(199, 155, 75, 0.018),
+    0 0 110px rgba(199, 155, 75, 0.11);
 }
 
 .heroEmblemRing::before,
@@ -226,14 +228,14 @@ main {
 
 .heroEmblemRing::before {
   top: 50%;
-  right: -34px;
-  left: -34px;
+  right: -48px;
+  left: -48px;
   height: 1px;
 }
 
 .heroEmblemRing::after {
-  top: -34px;
-  bottom: -34px;
+  top: -48px;
+  bottom: -48px;
   left: 50%;
   width: 1px;
 }
@@ -242,13 +244,15 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 48%;
-  max-width: 225px;
+  width: 56%;
+  max-width: 292px;
   height: auto;
   object-fit: contain;
   object-position: center;
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 12px 34px rgba(199, 155, 75, 0.28));
+  filter:
+    drop-shadow(0 0 10px rgba(255, 226, 143, 0.20))
+    drop-shadow(0 12px 36px rgba(199, 155, 75, 0.38));
 }
 
 .heroEmblemIndex,
@@ -261,13 +265,13 @@ main {
 }
 
 .heroEmblemIndex {
-  top: 16px;
-  right: 18px;
+  top: 10%;
+  right: 6%;
 }
 
 .heroEmblemLabel {
-  right: 18px;
-  bottom: 16px;
+  right: 1%;
+  bottom: 8%;
 }
 
 .heroContent {
@@ -879,10 +883,14 @@ main {
   }
 
   .heroEmblem {
-    top: 35%;
-    right: -20vw;
-    width: 74vw;
-    opacity: 0.72;
+    top: 34%;
+    right: -24vw;
+    width: 78vw;
+    opacity: 0.78;
+  }
+
+  .heroEmblemLogo {
+    width: 52%;
   }
 
   .heroStatus {
