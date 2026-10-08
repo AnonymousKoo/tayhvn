@@ -238,16 +238,16 @@ main {
   width: 1px;
 }
 
-.heroEmblemLetter {
+.heroEmblemLogo {
   position: absolute;
   top: 50%;
   left: 50%;
-  color: rgba(215, 185, 109, 0.19);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(180px, 19vw, 330px);
-  font-weight: 700;
-  line-height: 0.7;
+  width: 68%;
+  max-width: 320px;
+  height: auto;
+  object-fit: contain;
   transform: translate(-50%, -50%);
+  filter: drop-shadow(0 10px 34px rgba(199, 155, 75, 0.24));
 }
 
 .heroEmblemIndex,
