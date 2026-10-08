@@ -19,7 +19,8 @@ export default function Home() {
 
       <header className="siteHeader">
         <a className="brand" href="#top" aria-label="TAYHVN Athletic home">
-          <img src={logo01} alt="TAYHVN Athletic" />
+          <span className="brandWord">TAYHVN</span>
+          <span className="brandSub">ATHLETIC</span>
         </a>
 
         <nav className="mainNav" aria-label="Primary navigation">
@@ -39,10 +40,19 @@ export default function Home() {
 
       <section className="hero" id="top">
         <div className="heroTexture" aria-hidden="true" />
-        <div className="heroMark" aria-hidden="true">T</div>
+        <div className="heroEmblem" aria-hidden="true">
+          <div className="heroEmblemRing" />
+          <span className="heroEmblemLetter">T</span>
+          <span className="heroEmblemIndex">01</span>
+          <span className="heroEmblemLabel">TAYHVN / ATHLETIC</span>
+        </div>
         <div className="heroContent">
-          <p className="eyebrow">TAYHVN ATHLETIC</p>
-          <h1>BUILT FOR THE WORK NO ONE SEES.</h1>
+          <p className="eyebrow">TAYHVN ATHLETIC · CAMPAIGN 001</p>
+          <h1>
+            <span>BUILT FOR</span>
+            <span>THE WORK</span>
+            <span>NO ONE SEES.</span>
+          </h1>
           <p className="heroCopy">
             Athletic essentials shaped by discipline, movement, and the standard
             you carry into everything.
