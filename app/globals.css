@@ -242,12 +242,13 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 68%;
-  max-width: 320px;
+  width: 48%;
+  max-width: 225px;
   height: auto;
   object-fit: contain;
+  object-position: center;
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 10px 34px rgba(199, 155, 75, 0.24));
+  filter: drop-shadow(0 12px 34px rgba(199, 155, 75, 0.28));
 }
 
 .heroEmblemIndex,
