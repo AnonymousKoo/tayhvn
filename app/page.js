@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 const logo01 =
   "https://th.webtestsdev.com/tns-lab/wp-content/uploads/2026/10/TAYHVN-Athletic-Logo-01.png";
 const logo02 =
@@ -58,7 +60,7 @@ function extractSlot(html, slot) {
 async function getMedia() {
   try {
     const response = await fetch(MEDIA_ENDPOINT, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
 
     if (!response.ok) return {};
